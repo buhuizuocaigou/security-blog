@@ -277,8 +277,9 @@ hash 保存在关联的日志太重   存放在 /usr/share/responder中
 使用ens224的原因是 因为ens224处于内网网段中 所以我们要是用他们 
 ![[Pasted image 20241204150712.png]]
 开始捕获哈希等内容信息
-
-
+hashcat  中 帮助文档中使用
+`hashcat -m 5600 forend_ntlmv2 .破解的字典路径`
+![[Pasted image 20241204151616.png]]
 
 
 
