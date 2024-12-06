@@ -280,19 +280,70 @@ hash 保存在关联的日志太重   存放在 /usr/share/responder中
 hashcat  中 帮助文档中使用
 `hashcat -m 5600 forend_ntlmv2 .破解的字典路径`
 ![[Pasted image 20241204151616.png]]
+破解完的信息 你会得到如下 文件：
+![[Pasted image 20241204155236.png]]
+其中 mssql 跟 smb 这个文件 是 存放了用户名跟破解的hash的关键信息 将其上传到本地文件后
+进行本地处理 
+如果要处理某个特定用户名的信息 ：、
+linux命令如下：
+例如 处理 用户名为 backupagent 的信息 只保留他的信息 ：
+`grep "backupagent" 含有原始hashcat信息的文件夹` >放到新的文件名中
+进行破解：
+利用john 破解  默认字典位置1 ：/usr/share/wordlists/rockyou.txt文件命中 
+`john -wordlist=字典路径位置 整理后的hash文件`
+john往往比hashccat 吃cpu吃的较少，容易运行一些 
 
 
+上述工具是针对LINUX而言的 hash的破解行为 
+
+#### 下面所说的工具是 window而言的
+目标：window工具
+场景：LLMNR 跟 NBT-NS中毒获取hash值
+工具：lnveigh:https://github.com/Kevin-Robertson/Inveigh
+关于此工具的参数说明：
+https://github.com/Kevin-Robertson/Inveigh/wiki/Parameters
+工具在C：\tools中找到 
+
+先执行：
+`import-Module .\Inveigh.ps1`
+是指的先执行这个模块内容 并且在独立模块中执行，在独立会话中执行这个内容
+![[Pasted image 20241204170327.png]]
+第一条命令 :`Import-Moudule .\Inveigh.ps1`
+这条命令揭示了局部变量启用模块 ，并且封装到局部模块中  执行 也就是只限定在特定会话中执行  如果要开启全局变量模式的话启用的是 -Global的模式 
+
+第二条命令：`(Get-Command Invoke-Inveigh).Parameters)`
+Get-Command ：这个命令查找获取有关指定的命令的详细信息，返回powershell的函数等详细信息
+`Invoke-Inveigh`查询命令，是cmdlent的具体引用函数的信息的值
+`.Parameters:`属性访问器，提取命令参数信息
+在下方可以看到所有的采纳数信息以及具体的数值分析
+第三条 在 执行完他们后 只允许 在这个窗口执行对应封装模块信息后，输入：
+````powershell-session
+ Invoke-Inveigh Y -NBNS Y -ConsoleOutput Y -FileOutput Y
+````
+其中  invoke-Inveigh  Y 代表的时同意的含义 -NBNS：是采用了监听NBNS机制  并且进行控制台书输出的同时输出到文件那 
+
+![[Pasted image 20241206110952.png]]
+
+此时可以看到野生飞扬在 上述输出内容中的 hash 
+，也可采用方法二：
+C# Inveigh 这个源代码可以深入研究探索 变异  
+但是自带 的  ，但是现在为了省时间的话，直接用即可 
+此代码待深入研究探索：
+.\开启exe后 ：进行编译探索 发现这里有句话 `press ESC to enter/exit interactive console`
+![[Pasted image 20241206112355.png]]
+
+摁esc进入控制台 并且输入HELP：
+![[Pasted image 20241206111306.png]]
 
 
+点击HELP 可以查看其帮助命令并且查看内部文档 ：
+![[Pasted image 20241206111543.png]]
+其中 NTLMV2使我们想找的东西  ：所以 GET NTLMV2后 
 
+![[Pasted image 20241206111619.png]]
 
-
-
-
-
-
-
-
+![[Pasted image 20241206111709.png]]
+找到对应目标hash 挪到kali中利用john破解即可 
 
 
 
