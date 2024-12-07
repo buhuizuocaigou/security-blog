@@ -5,6 +5,17 @@
 可能导致的某些攻击落空 但是看起来有用的：
 也就是说极有可能造成误报的攻击方式：
 1 https://techcommunity.microsoft.com/blog/filecab/smb-and-null-sessions-why-your-pen-test-is-probably-wrong/1185365  SMB NULL会话 
+	插入相关信息：
+	1 何为widnwo进程IPC的简述  就是无需身份验证即可直接登录 ，既密码默认为NULL状态 
+	smb的NULL回话如同 window进程IPC共享会话一样 
+	什么是IPC的共享会话机制呢？：
+https://learn.microsoft.com/en-us/troubleshoot/windows-server/networking/inter-process-communication-share-null-session
+在window中 IPC$称之为是空会话链接，并且window允许佚名用户登录进行 
+
+windows中有个神奇的行为 是 配置适合的权限来陪孩子是佛可以佚名访问共享用户。默认的是禁止使用的，但是不知道效果到底是不是禁用的
+看起来 smb的null凭证登录是给了一个空密码登录，但是实际上并不是这样的，他内部存在显示登录跟隐式登录
+
+
 2 LDAP佚名绑定    采用的某种特定的访客模式 来允许使用者使用他们的过程 ：https://www.ibm.com/docs/zh/cmofm/10.1.0?topic=processes-ondemand-logon-ldap-authentication-anonymous-binding
 重点是首先利用kerbrute模式的进行用户枚举
 借 jsmith.txt的username 列表 后跟 kerbrute工具枚举有效的域用户进行密码喷洒 后，可以直接拿下攻击路径  在jsmith.txt获取到用户列表 然后在跟抓取的领英结果相结合 生成了密码组合
