@@ -180,3 +180,30 @@ Cyber 是查询的基本语言
 说明数据已经搜集完毕 现在我们要做的是将他们在bloodhound 中以一种图形化的方式展现出来
 将其搜集到的数据信息打包成压缩包.zip:
 
+
+
+
+# 关于（针对攻击主机而言）Window部分：
+目标 1：利用工具对目标主机进行枚举  
+采用的工具：Sharphound /Bloodhound 、powerview sharpview   grouper2 snaffler 等AD枚举的内置工具信息，除了针对这次攻击而言的外还可以学习一些信息点的搜集
+
+目标2：可能导致横向或者纵向移动并且错误配置与权限的问题，域的设置方式 等 是否会考虑到跨域之间的合作等等 会造成什么问题 ，？共享文件配置不当会造成那些问题的发现与产生？
+
+
+## 工具一：Active Driectory Powershell 模块
+https://learn.microsoft.com/en-us/powershell/module/activedirectory/?view=windowsserver2022-ps
+总结：微软为了单独的AD powershell单独配置了一套cmdlet 的powershell模块体系内容
+
+只选择一部分讲解 （针对枚举有用的）
+
+前提条件  ：让 powershell加载AD相关模块体系 ：
+导入包  （跟python条件差不多）然后再Get-Module 获取模块信息
+![[Pasted image 20250123065102.png]]
+关键在于 Active Directory 这个包 的相关内容 
+Get-ADDomain 这个查询AD相关的基础枚举信息内容
+![[Pasted image 20250123065534.png]]
+https://learn.microsoft.com/en-us/powershell/module/activedirectory/get-addomain?view=windowsserver2022-ps
+上述为微软链接具体 内容 
+列出整个域的基础信息技能能力 
+
+第二步：Get-ADUser 获取 基础user的权限能力， 以Kerberos协议为例，此项技术在于进一步获取筛选容易受到攻击的Kerberos的列表
